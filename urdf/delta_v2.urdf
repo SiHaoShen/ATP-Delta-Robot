@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_robot">
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <cylinder length="0.02" radius="0.180"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+        </visual>
+    </link>
+
+    <xacro:macro name="arm" params="number base_radius upper_arm_length lower_arm_length">
+
+        <link name="upper_arm_${number}">
+            <visual>
+                <geometry>
+                    <box size="${upper_arm_length} 0.02 0.02"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="${upper_arm_length*0.5} 0 0"/>
+                <material name="blue">
+                    <color rgba="0 0 1 1"/>
+                </material>
+            </visual>
+        </link>
+
+        <joint name="base_to_upper_arm_${number}" type="revolute">
+            <axis xyz="0 1 0"/>
+            <origin rpy="0 0 ${(number-1)*120/360*pi}" xyz="${base_radius*cos((number-1)*120)} ${base_radius*sin((number-1)*120)} 0"/>
+            <limit effort="1000.0" lower="${-pi*0.5}" upper="${pi*0.5}" velocity="0.5"/>
+            <parent link="base_link"/>
+            <child link="upper_arm_${number}"/>
+        </joint>
+
+        <link name="elbow_${number}">
+            <visual>
+                <geometry>
+                    <cylinder radius="0.0" length="0.0"/> 
+                </geometry>
+                <origin rpy="0 0 0" xyz="5e-20 0 0"/>
+                <material name="blue">
+                    <color rgba="0 0 0.8 1"/>
+                </material>
+            </visual>
+        </link>
+
+        <joint name="upper_to_dummy_${number}" type="revolute">
+            <!--
+            <axis xyz="0 1 0"/>
+            <origin rpy="0 0 ${(number-1)*120/360*pi}" xyz="${base_radius*cos((number-1)*120)} ${base_radius*cos((number-1)*120)} 0"/>
+            <limit effort="1000.0" lower="${-pi*0.5}" upper="${pi*0.5}" velocity="0.5"/>
+            <parent link="base_link"/>
+            <child link="upper_arm_${number}"/>
+            -->
+        </joint>
+
+        <link name="lower_arm_${number}">
+            <visual>
+                <geometry>
+                    <box size="${lower_arm_length} 0.02 0.02"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="${lower_arm_length*0.5} 0 0"/>
+                <material name="blue">
+                    <color rgba="0 0 0.8 1"/>
+                </material>
+            </visual>
+        </link>
+
+
+    </xacro:macro>
+
+    <origin rpy="0 0 0.5236" xyz="0.155885 0.09 0"/>
+    <origin rpy="0 0 2.618" xyz="-0.155885 0.09 0"/>

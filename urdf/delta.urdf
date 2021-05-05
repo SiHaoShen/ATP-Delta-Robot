@@ -1,0 +1,339 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ABB_IRB360">
+
+    <link name="base">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/BASE.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 -1.5708" xyz="0 0 0"/>
+            <material name="light_grey">
+                <color rgba="0.95 0.95 0.95 1"/>
+            </material>
+        </visual>
+    </link>
+
+    <!-- ARM 1, includes dummy for IK solving and end effector -->
+
+    <link name="upper_arm_1">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/UPPER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="0.200 0.20 0.200 1"/>
+            </material>
+        </visual>
+        <!--
+        <collision>
+            <geometry>
+                <cylinder radius="0.12" length="0.35"/>
+            </geometry>
+        </collision>-->
+    </link>
+
+    <joint name="base_to_upper_arm_1" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin rpy="0 0 0.5236" xyz="0.1732 0.1 0"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="base"/>
+        <child link="upper_arm_1"/>
+    </joint>
+
+  
+    <!--
+    <link name="c_upper_arm_1">
+        <visual>
+            <geometry>
+                <cylinder radius="0.06" length="0.35"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0.2 0 -0.5"/>
+            <material name="blue">
+                <color rgba="0 0 0.8 1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="c_base_to_upper_arm_1" type="planar">
+        <parent link="base"/>
+        <child link="c_upper_arm_1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    -->
+
+        
+    <link name="elbow_1">
+        <visual>
+            <geometry>
+                <cylinder radius="0.008" length="0.06"/> 
+            </geometry>
+            <origin rpy="0 -1.5708 1.5708" xyz="0 0 0"/>
+            <material name="invisible">
+                <color rgba="0 0 0 0.1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="upper_to_elbow_1" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin rpy="0 0 0" xyz="0.35 0 0"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="upper_arm_1"/>
+        <child link="elbow_1"/>
+    </joint>
+
+        
+    <link name="lower_arm_1_A">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/LOWER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 3.1416" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="0.200 0.20 0.200 1"/>
+            </material> 
+        </visual>
+    </link>
+
+    <joint name="elbow_to_lower_1_A" type="revolute">
+        <axis xyz="1 0 0"/>
+        <origin rpy="0 0 0" xyz="0 0.05 0"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="elbow_1"/>
+        <child link="lower_arm_1_A"/>
+    </joint>
+
+    <link name="lower_arm_1_B">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/LOWER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="0.200 0.20 0.200 1"/>
+            </material>  
+        </visual>
+    </link>
+
+    <joint name="elbow_to_lower_1_B" type="revolute">
+        <axis xyz="1 0 0"/>
+        <origin rpy="0 0 0" xyz="0 -0.05 0"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="elbow_1"/>
+        <child link="lower_arm_1_B"/>
+    </joint>
+
+
+    <link name="lower_elbow">
+        <visual>
+            <geometry>
+                <cylinder radius="0.008" length="0.06"/> 
+            </geometry>
+            <origin rpy="0 1.5708 1.5708" xyz="0 0 0"/>
+            <material name="invisible"/>
+          
+        </visual>
+    </link>
+    
+    
+    <joint name="lower_arm_1_A_to_lower_elbow" type="revolute">
+        <axis xyz="-1 0 0"/>
+        <origin rpy="0 0 0" xyz="0 -0.05 -0.82"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="lower_arm_1_A"/>
+        <child link="lower_elbow"/>
+    </joint>
+    
+    
+    <link name="end_effector">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/END_EFFECTOR.stl"/>
+            </geometry>       
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="light_grey">
+                <color rgba="0.95 0.95 0.95 1"/>
+            </material>
+        </visual>
+    </link>
+    
+    <joint name="end_effector_joint" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin rpy="0 0 0" xyz="-0.04 0 0"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="lower_elbow"/>
+        <child link="end_effector"/>
+    </joint>
+    
+       
+    
+<!-- ARM 2 -->
+
+    <link name="upper_arm_2">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/UPPER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="200 20 200 1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="base_to_upper_arm_2" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin rpy="0 0 -1.5708" xyz="0 -0.2 0"/>
+        <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+        <parent link="base"/>
+        <child link="upper_arm_2"/>
+    </joint>
+     
+
+    <link name="elbow_2">
+        <visual>
+            <geometry>
+                <cylinder radius="0.008" length="0.06"/> 
+            </geometry>
+            <origin rpy="0 1.5708 1.5708" xyz="0 0 0"/>
+            <material name="invisible">
+                <color rgba="0 0 0 0.1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="upper_to_elbow_2" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin rpy="0 0 0" xyz="0.35 0 0"/>
+        <limit effort="1000.0" lower="0" upper="3" velocity="0.5"/>
+        <parent link="upper_arm_2"/>
+        <child link="elbow_2"/>
+    </joint>
+    
+    <link name="lower_arm_2_A">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/LOWER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 3.1416" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="0.200 0.20 0.200 1"/>
+            </material>   
+        </visual>
+    </link>
+
+    <joint name="elbow_to_lower_2_A" type="revolute">
+        <axis xyz="1 0 0"/>
+        <origin rpy="0 0 0" xyz="0 0.05 0"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="elbow_2"/>
+        <child link="lower_arm_2_A"/>
+    </joint>
+
+    <link name="lower_arm_2_B">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/LOWER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="0.200 0.20 0.200 1"/>
+            </material>   
+        </visual>
+    </link>
+
+    <joint name="elbow_to_lower_2_B" type="revolute">
+        <axis xyz="1 0 0"/>
+        <origin rpy="0 0 0" xyz="0 -0.05 0"/>
+        <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+        <parent link="elbow_2"/>
+        <child link="lower_arm_2_B"/>
+    </joint>
+    
+    
+<!-- ARM 3 -->
+
+    <link name="upper_arm_3">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/UPPER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="200 20 200 1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="base_to_upper_arm_3" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin rpy="0 0 2.6180" xyz="-0.1732 0.1 0"/>
+        <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+        <parent link="base"/>
+        <child link="upper_arm_3"/>
+    </joint>
+
+    <link name="elbow_3">
+        <visual>
+            <geometry>
+                <cylinder radius="0.008" length="0.06"/> 
+            </geometry>
+            <origin rpy="0 1.5708 1.5708" xyz="0 0 0"/>
+            <material name="invisible">
+                <color rgba="0 0 0 0.1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="upper_to_elbow_3" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin rpy="0 0 0" xyz="0.35 0 0"/>
+        <limit effort="1000.0" lower="0" upper="3" velocity="0.5"/>
+        <parent link="upper_arm_3"/>
+        <child link="elbow_3"/>
+    </joint>
+    
+    <link name="lower_arm_3_A">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/LOWER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 3.1416" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="0.200 0.20 0.200 1"/>
+            </material>   
+        </visual>
+    </link>
+
+    <joint name="elbow_to_lower_3_A" type="revolute">
+        <axis xyz="1 0 0"/>
+        <origin rpy="0 0 0" xyz="0 0.05 0"/>
+        <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="0.5"/>
+        <parent link="elbow_3"/>
+        <child link="lower_arm_3_A"/>
+    </joint>
+
+    <link name="lower_arm_3_B">
+        <visual>
+            <geometry>
+                <mesh filename="package://delta_robot/meshes/LOWER_ARM.stl"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="grey">
+                <color rgba="0.200 0.20 0.200 1"/>
+            </material>   
+        </visual>
+    </link>
+
+    <joint name="elbow_to_lower_3_B" type="revolute">
+        <axis xyz="1 0 0"/>
+        <origin rpy="0 0 0" xyz="0 -0.05 0"/>
+        <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+        <parent link="elbow_3"/>
+        <child link="lower_arm_3_B"/>
+    </joint>
+
+    
+ 
+</robot>
